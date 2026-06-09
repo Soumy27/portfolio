@@ -1,0 +1,938 @@
+/* ============================================================
+   FONTS — the original typefaces, self-hosted in /public/fonts.
+   ============================================================ */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/PPNeueMontreal-Light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/PPNeueMontreal-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'PP Eiko';
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/PPEiko-RegularItalic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fragment Mono';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/FragmentMono-Regular.woff2') format('woff2');
+}
+
+:root {
+  --font-sans: 'PP Neue Montreal', system-ui, sans-serif;
+  --font-serif: 'PP Eiko', Georgia, serif;
+  --font-mono: 'Fragment Mono', monospace;
+
+  --black: #0a0a0a;
+  --white: #f4f3ef;
+  --vh: 1vh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+img,
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ff-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.font-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* helpers */
+.fc-w {
+  color: var(--white);
+}
+.fc-b {
+  color: var(--black);
+}
+.bg-w {
+  background: var(--white);
+}
+.bg-b {
+  background: var(--black);
+}
+.w-vw {
+  width: 100vw;
+}
+
+/* ============================================================
+   WEBGL DOT-SCREEN BACKGROUND
+   ============================================================ */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--white);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+}
+.cursor.is-view {
+  width: 72px;
+  height: 72px;
+  background: var(--white);
+}
+.cursor .cursor-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.cursor.is-view .cursor-label {
+  opacity: 1;
+}
+@media (hover: none) {
+  .cursor {
+    display: none;
+  }
+}
+
+/* ============================================================
+   PRELOADER
+   ============================================================ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+.preloader .lines-wrap {
+  overflow: hidden;
+}
+/* counter matches the SOUMY / PORTFOLIO labels, centred between them */
+.preloader .loader-number {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* ============================================================
+   INTRO LANDING (the dark first screen)
+   ============================================================ */
+.intro-landing {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: var(--black);
+  color: var(--white);
+  overflow: hidden;
+}
+.intro-name {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 15.5vw, 16rem);
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.intro-name .lines-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.intro-name .rise {
+  display: inline-block;
+}
+.intro-name .yr {
+  font-style: italic;
+}
+.intro-row {
+  position: absolute;
+  top: 53%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+.intro-row span:nth-child(2) {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.intro-folio {
+  position: absolute;
+  top: 74%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 5rem);
+  letter-spacing: 0.01em;
+}
+.intro-strip {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: clamp(90px, 14vh, 170px);
+}
+.intro-tagline {
+  position: absolute;
+  left: 50%;
+  bottom: 1.8rem;
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--black);
+  line-height: 1.5;
+  z-index: 1;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  color: var(--white);
+}
+.site-header .sh-link {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* big name: starts centred at top, scroll shrinks it to the top-left */
+.sh-name {
+  position: fixed;
+  top: 1.2rem;
+  left: 0;
+  transform-origin: left top;
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 10.2vw, 9.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  will-change: transform;
+}
+.sh-name .sh-year {
+  font-style: italic;
+}
+
+/* middle row: (About) · motto · (Contact) — fades out on scroll */
+.sh-row {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sh-row .sh-motto {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* big wordmark at the bottom of the first screen — fades out on scroll */
+.sh-folio-big {
+  position: fixed;
+  bottom: 1.6rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 5vw, 4rem);
+  letter-spacing: 0.01em;
+}
+
+/* compact top-right bar — fades in on scroll */
+.sh-bar {
+  position: fixed;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  opacity: 0;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+.kv-bottom {
+  position: absolute;
+  bottom: 5.5rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  mix-blend-mode: difference;
+  color: var(--white);
+  font-size: 0.85rem;
+}
+.kv-bottom p {
+  line-height: 1.4;
+}
+
+.dynamic-clone {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  color: var(--white);
+  mix-blend-mode: difference;
+}
+.dynamic-clone.grayscale {
+  filter: grayscale(1);
+}
+.dynamic-clone.rotate {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.intro-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6vw;
+  text-align: center;
+}
+.intro-wrap h4 {
+  font-weight: 300;
+  font-size: clamp(1.6rem, 4vw, 3.4rem);
+  line-height: 1.15;
+  max-width: 22ch;
+}
+.lines-wrap {
+  overflow: hidden;
+}
+
+/* ============================================================
+   METALLIC / LIQUID-CHROME SURFACE (shared)
+   ============================================================ */
+.metallic {
+  position: relative;
+  background:
+    radial-gradient(40% 55% at 18% 28%, #ededed 0%, rgba(237, 237, 237, 0) 60%),
+    radial-gradient(45% 50% at 78% 20%, #c2c2c2 0%, rgba(194, 194, 194, 0) 55%),
+    radial-gradient(58% 62% at 62% 84%, #8a8a8a 0%, rgba(138, 138, 138, 0) 62%),
+    radial-gradient(38% 45% at 38% 60%, #f6f6f6 0%, rgba(246, 246, 246, 0) 55%),
+    radial-gradient(50% 55% at 90% 74%, #6e6e6e 0%, rgba(110, 110, 110, 0) 55%),
+    radial-gradient(45% 50% at 8% 80%, #d6d6d6 0%, rgba(214, 214, 214, 0) 55%),
+    linear-gradient(
+      118deg,
+      #6e6e6e 0%,
+      #b4b4b4 26%,
+      #7a7a7a 46%,
+      #e0e0e0 66%,
+      #767676 100%
+    );
+}
+.metallic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* ============================================================
+   SHOWREEL CUBE SECTION
+   ============================================================ */
+.cube-section {
+  position: relative;
+  height: 100vh;
+}
+.cube-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cube-hint {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: var(--white);
+  mix-blend-mode: difference;
+  letter-spacing: 0.08em;
+}
+.metallic-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cube-intro-text {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  padding: 0 5vw;
+  pointer-events: none;
+}
+.cube-intro-text h4 {
+  font-weight: 400;
+  font-size: clamp(1.8rem, 5.2vw, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #1c1c1c;
+  mix-blend-mode: overlay;
+}
+.cube-intro-text .lines-wrap {
+  display: block;
+  overflow: hidden;
+}
+.cube-intro-text .split-line {
+  display: block;
+}
+.cube-section .scene {
+  position: relative;
+  z-index: 1;
+}
+.scene {
+  position: relative;
+  width: 340px;
+  height: 340px;
+  transform-style: preserve-3d;
+}
+.cube {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.cube .face {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  overflow: hidden;
+  background: var(--black);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  /* only show faces pointing toward the viewer -> clean solid cube */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* an image face shows the WHOLE screenshot, framed (no cropping) */
+.cube .face:has(img) {
+  background: #f4f3ef;
+}
+.cube .face img {
+  object-fit: contain;
+}
+.cube .front {
+  transform: translateZ(170px);
+}
+.cube .back {
+  transform: rotateY(180deg) translateZ(170px);
+}
+.cube .right {
+  transform: rotateY(90deg) translateZ(170px);
+}
+.cube .left {
+  transform: rotateY(-90deg) translateZ(170px);
+}
+.cube .top {
+  transform: rotateX(90deg) translateZ(170px);
+}
+.cube .bottom {
+  transform: rotateX(-90deg) translateZ(170px);
+}
+.face-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.cube-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  color: var(--white);
+}
+.cube-title .marquee {
+  display: flex;
+  overflow: hidden;
+  width: 100vw;
+  white-space: nowrap;
+}
+.cube-title .marquee span {
+  font-size: clamp(4rem, 12vw, 11rem);
+  font-weight: 400;
+  padding-right: 0.4em;
+  line-height: 0.9;
+}
+
+/* ============================================================
+   PROJECTS SECTION
+   ============================================================ */
+.projects-section {
+  position: relative;
+  height: 300vh;
+  background: var(--black);
+}
+.projects-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.desc-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 6vw;
+}
+.desc-wrap .lead p {
+  font-size: clamp(1.4rem, 3.4vw, 2.8rem);
+  font-weight: 300;
+  line-height: 1.2;
+}
+.desc-wrap .cross {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin: 1.5rem 0;
+}
+.service-list {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+.service-list h3 {
+  font-size: clamp(2rem, 7vw, 6rem);
+  font-weight: 400;
+  line-height: 1;
+  cursor: default;
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+/* hover one item -> the others blur & dim, the hovered one stays sharp */
+.service-list:has(h3:hover) h3 {
+  filter: blur(7px);
+  opacity: 0.35;
+}
+.service-list:has(h3:hover) h3:hover {
+  filter: blur(0);
+  opacity: 1;
+}
+.projects-title {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.projects-title h1 {
+  font-size: clamp(4rem, 18vw, 18rem);
+  font-weight: 400;
+  line-height: 0.85;
+}
+
+.cards-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.card-pos {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.card {
+  display: block;
+  width: clamp(190px, 20vw, 280px);
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+}
+.card-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, #c9c4ba, #8a857c);
+  border-radius: 2px;
+}
+/* show the WHOLE screenshot inside the block (nothing cropped) */
+.card-img img {
+  object-fit: contain;
+  transition: transform 0.6s ease;
+}
+.card:hover .card-img img {
+  transform: scale(1.03);
+}
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+.card-content h2 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.card-content p {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  max-width: 32ch;
+  opacity: 0.7;
+}
+.card-arrow {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* ============================================================
+   ABOUT OVERLAY
+   ============================================================ */
+/* full-screen layer that blurs the page behind it */
+.about-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.about-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* dark rounded panel on the LEFT, slides in */
+.about-panel {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  width: min(42%, 580px);
+  background: var(--black);
+  color: var(--white);
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transform: translateX(calc(-100% - 1.5rem));
+  transition: transform 0.65s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.about-overlay.is-open .about-panel {
+  transform: translateX(0);
+}
+
+/* centred round close button */
+.about-close {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-bio {
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.about-bio p + p {
+  margin-top: 1.2rem;
+}
+.about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  margin-top: auto;
+  padding-top: 3rem;
+}
+.about-info h6 {
+  opacity: 0.5;
+  margin-bottom: 0.6rem;
+  font-weight: 400;
+}
+.about-info li {
+  line-height: 1.6;
+}
+
+/* ============================================================
+   FOOTER / OUTRO
+   ============================================================ */
+.outro {
+  position: relative;
+  min-height: 100vh;
+  color: #141414;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 7rem 2rem 2rem;
+  overflow: hidden;
+}
+.outro > *:not(.metallic):not(.folder) {
+  position: relative;
+  z-index: 1;
+}
+.outro-headline {
+  text-align: center;
+  font-weight: 300;
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.back-to-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 auto;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.back-to-top .btt-btn {
+  width: 64px;
+  height: 64px;
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+.back-to-top:hover .btt-btn {
+  transform: translateY(-4px);
+}
+.back-to-top .btt-btn svg {
+  width: 18px;
+  height: 19px;
+}
+
+/* bottom group: giant wordmark + credit/links */
+.footer-bottom {
+  width: 100%;
+}
+/* giant faint wordmark */
+.footer-mark {
+  width: 100%;
+  text-align: center;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 13vw, 13rem);
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: rgba(20, 20, 20, 0.32);
+  margin-bottom: 1.5rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.footer-info-txt {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+.footer-info-txt .links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* draggable folders */
+.folder {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: grab;
+  color: #141414;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  user-select: none;
+  touch-action: none;
+}
+.folder svg {
+  width: 44px;
+  height: 36px;
+}
+.folder:active {
+  cursor: grabbing;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .kv-bottom {
+    flex-direction: column;
+    gap: 0.5rem;
+    bottom: 7rem;
+  }
+  .card {
+    width: 70vw;
+  }
+  .about-info {
+    gap: 2rem;
+  }
+}
