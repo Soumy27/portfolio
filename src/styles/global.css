@@ -921,18 +921,143 @@ video {
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE  (phones / small tablets)
    ============================================================ */
 @media (max-width: 768px) {
-  .kv-bottom {
-    flex-direction: column;
-    gap: 0.5rem;
-    bottom: 7rem;
+  html,
+  body {
+    overflow-x: hidden;
   }
-  .card {
-    width: 70vw;
+
+  /* ---- HEADER: static compact bar (no scroll morph) ---- */
+  .site-header.is-mobile {
+    padding: 1rem 1.2rem;
+  }
+  .site-header.is-mobile .sh-name {
+    position: fixed;
+    top: 1rem;
+    left: 1.2rem;
+    transform: none !important;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+  .site-header.is-mobile .sh-row,
+  .site-header.is-mobile .sh-folio-big {
+    display: none;
+  }
+  .site-header.is-mobile .sh-bar {
+    position: fixed;
+    top: 1.15rem;
+    right: 1.2rem;
+    opacity: 1;
+    visibility: visible;
+    gap: 1rem;
+    font-size: 0.6rem;
+  }
+  .site-header.is-mobile .sh-folio-sm {
+    display: none;
+  }
+
+  /* ---- INTRO STATEMENT ---- */
+  .cube-intro-text h4 {
+    font-size: clamp(1.3rem, 6vw, 2.4rem);
+    line-height: 1.1;
+  }
+
+  /* ---- PROJECTS: plain stacked list (no scatter / pin) ---- */
+  .projects-section.is-mobile {
+    height: auto;
+  }
+  .projects-section.is-mobile .projects-sticky {
+    position: static;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding: 7rem 1.2rem 4rem;
+  }
+  .projects-section.is-mobile .projects-title,
+  .projects-section.is-mobile .service-list,
+  .projects-section.is-mobile .cards-layer {
+    position: static;
+    inset: auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+  .projects-section.is-mobile .projects-title {
+    order: 0;
+    justify-content: flex-start;
+  }
+  .projects-section.is-mobile .projects-title h1 {
+    font-size: clamp(3.5rem, 24vw, 7rem);
+  }
+  .projects-section.is-mobile .cards-layer {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .projects-section.is-mobile .card-pos {
+    position: static;
+    transform: none !important;
+    width: 100%;
+  }
+  .projects-section.is-mobile .card {
+    width: 100%;
+    opacity: 1 !important;
+  }
+  .projects-section.is-mobile .service-list {
+    order: 2;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .projects-section.is-mobile .service-list h3 {
+    font-size: clamp(2rem, 11vw, 3.5rem);
+  }
+
+  /* ---- FOOTER ---- */
+  .outro {
+    padding: 6rem 1.2rem 1.5rem;
+  }
+  .footer-mark {
+    font-size: clamp(2rem, 15vw, 6rem);
+    white-space: normal;
+  }
+  .footer-info-txt {
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.62rem;
+  }
+  .footer-info-txt .links {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .outro-headline {
+    font-size: clamp(1.6rem, 8vw, 3rem);
+  }
+
+  /* ---- ABOUT PANEL: full width ---- */
+  .about-panel {
+    width: auto;
+    left: 1rem;
+    right: 1rem;
+    top: 1rem;
+    bottom: 1rem;
+    padding: 2.5rem 1.5rem;
+  }
+  .about-bio {
+    font-size: 1rem;
   }
   .about-info {
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+
+  /* ---- PRELOADER ---- */
+  .preloader {
+    padding: 0 1.2rem;
+    font-size: 0.65rem;
   }
 }

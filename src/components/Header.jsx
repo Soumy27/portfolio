@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { profile } from '../data/content'
@@ -10,8 +10,16 @@ export default function Header({ onAbout }) {
   const rowRef = useRef(null)
   const folioBigRef = useRef(null)
   const barRef = useRef(null)
+  const [isMobile] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 768px)').matches
+  )
 
   useEffect(() => {
+    // mobile: static compact header (no scroll morph)
+    if (isMobile) return
+
     const hero = document.querySelector('.hero')
     const name = nameRef.current
     if (!hero || !name) return
@@ -66,7 +74,7 @@ export default function Header({ onAbout }) {
     )
 
     return () => tweens.forEach((t) => (t.scrollTrigger?.kill(), t.kill()))
-  }, [])
+  }, [isMobile])
 
   const folio = (
     <>
@@ -75,7 +83,7 @@ export default function Header({ onAbout }) {
   )
 
   return (
-    <header className="site-header">
+    <header className={`site-header${isMobile ? ' is-mobile' : ''}`}>
       <h1 className="sh-name" ref={nameRef}>
         {profile.name}
         <span className="ff-italic sh-year">{profile.landingYear}</span>

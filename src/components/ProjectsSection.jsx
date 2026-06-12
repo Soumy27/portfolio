@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { projects, services } from '../data/content'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const mobileQuery = '(max-width: 768px)'
 
 const Arrow = () => (
   <svg className="card-arrow" viewBox="0 0 28 28" fill="none">
@@ -28,8 +30,15 @@ export default function ProjectsSection() {
   const serviceRef = useRef(null)
   const titleRef = useRef(null)
   const cardsRef = useRef(null)
+  const [isMobile] = useState(
+    () =>
+      typeof window !== 'undefined' && window.matchMedia(mobileQuery).matches
+  )
 
   useEffect(() => {
+    // mobile: plain stacked layout (no pinned scatter animation)
+    if (isMobile) return
+
     const vw = () => window.innerWidth
     const vh = () => window.innerHeight
     const cards = cardsRef.current.querySelectorAll('.card')
@@ -91,18 +100,29 @@ export default function ProjectsSection() {
       tl.scrollTrigger?.kill()
       tl.kill()
     }
-  }, [])
+  }, [isMobile])
 
   return (
-    <section className="projects-section" ref={section}>
+    <section
+      className={`projects-section${isMobile ? ' is-mobile' : ''}`}
+      ref={section}
+    >
       <div className="projects-sticky">
-        <div className="service-list" ref={serviceRef} style={{ opacity: 0 }}>
+        <div
+          className="service-list"
+          ref={serviceRef}
+          style={isMobile ? undefined : { opacity: 0 }}
+        >
           {services.map((s) => (
             <h3 key={s}>{s}</h3>
           ))}
         </div>
 
-        <div className="projects-title" ref={titleRef} style={{ opacity: 0 }}>
+        <div
+          className="projects-title"
+          ref={titleRef}
+          style={isMobile ? undefined : { opacity: 0 }}
+        >
           <h1>
             <span>
               {'projects'.split('').map((c, i) => (
@@ -125,7 +145,7 @@ export default function ProjectsSection() {
         <div
           className="cards-layer"
           ref={cardsRef}
-          style={{ opacity: 0, visibility: 'hidden' }}
+          style={isMobile ? undefined : { opacity: 0, visibility: 'hidden' }}
         >
           {projects.map((p, i) => (
             <div className="card-pos" key={i} style={{ zIndex: 10 + i }}>
