@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { profile } from '../data/content'
+import useIsMobile from '../hooks/useIsMobile'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -10,11 +11,7 @@ export default function Header({ onAbout }) {
   const rowRef = useRef(null)
   const folioBigRef = useRef(null)
   const barRef = useRef(null)
-  const [isMobile] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.matchMedia('(max-width: 768px)').matches
-  )
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     // mobile: static compact header (no scroll morph)

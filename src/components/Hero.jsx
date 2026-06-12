@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
-import { dynamicWords } from '../data/content'
+import { dynamicWords, profile } from '../data/content'
+import useIsMobile from '../hooks/useIsMobile'
 
 export default function Hero() {
   const heroRef = useRef(null)
   const wordIndex = useRef(0)
+  const isMobile = useIsMobile()
 
   // mouse-trail clones of a rotating word across the first screen
   useEffect(() => {
@@ -41,5 +43,16 @@ export default function Hero() {
     return () => window.removeEventListener('pointermove', move)
   }, [])
 
-  return <section className="hero" ref={heroRef} />
+  return (
+    <section className="hero" ref={heroRef}>
+      {isMobile && (
+        <div className="hero-landing">
+          <p className="hero-landing-motto font-mono">{profile.motto}</p>
+          <div className="hero-landing-folio">
+            {profile.wordmark} - <span className="ff-italic">Folio</span>
+          </div>
+        </div>
+      )}
+    </section>
+  )
 }

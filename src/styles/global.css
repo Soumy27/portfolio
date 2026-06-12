@@ -923,7 +923,7 @@ video {
 /* ============================================================
    RESPONSIVE  (phones / small tablets)
    ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 1280px) {
   html,
   body {
     overflow-x: hidden;
@@ -949,13 +949,40 @@ video {
     position: fixed;
     top: 1.15rem;
     right: 1.2rem;
-    opacity: 1;
-    visibility: visible;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
     gap: 1rem;
     font-size: 0.6rem;
   }
   .site-header.is-mobile .sh-folio-sm {
     display: none;
+  }
+
+  /* ---- HERO LANDING (mobile/tablet first screen: motto + Dev-Folio) ---- */
+  .hero-landing {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    padding: 26vh 1.2rem 8vh;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-landing-motto {
+    font-size: 0.65rem;
+    max-width: 24ch;
+    line-height: 1.6;
+  }
+  .hero-landing-folio {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.8rem, 16vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.01em;
   }
 
   /* ---- INTRO STATEMENT ---- */
@@ -977,6 +1004,9 @@ video {
     flex-direction: column;
     gap: 2.5rem;
     padding: 7rem 1.2rem 4rem;
+    /* keep the stacked column readable on tablets / reduced windows */
+    max-width: 760px;
+    margin: 0 auto;
   }
   .projects-section.is-mobile .projects-title,
   .projects-section.is-mobile .service-list,
@@ -986,6 +1016,7 @@ video {
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
+    pointer-events: auto;
   }
   .projects-section.is-mobile .projects-title {
     order: 0;
@@ -998,29 +1029,78 @@ video {
     order: 1;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 3rem;
   }
   .projects-section.is-mobile .card-pos {
     position: static;
     transform: none !important;
     width: 100%;
+    z-index: auto !important;
   }
   .projects-section.is-mobile .card {
     width: 100%;
     opacity: 1 !important;
   }
+  /* reset any inline state GSAP may have left when crossing the breakpoint */
+  .projects-section.is-mobile .card-img img {
+    transform: none !important;
+  }
+  .projects-section.is-mobile .card-img {
+    aspect-ratio: 16 / 10;
+    border-radius: 8px;
+  }
+  .projects-section.is-mobile .card-content {
+    margin-top: 1rem;
+    align-items: flex-start;
+  }
+  .projects-section.is-mobile .card-content h2 {
+    font-size: 1.15rem;
+  }
+  .projects-section.is-mobile .card-content p {
+    font-size: 0.9rem;
+    max-width: none;
+    opacity: 0.65;
+  }
+  .projects-section.is-mobile .card-arrow {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
   .projects-section.is-mobile .service-list {
     order: 2;
     align-items: flex-start;
     text-align: left;
+    gap: 0.1rem;
+    margin-top: 1rem;
   }
   .projects-section.is-mobile .service-list h3 {
     font-size: clamp(2rem, 11vw, 3.5rem);
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
 
   /* ---- FOOTER ---- */
   .outro {
-    padding: 6rem 1.2rem 1.5rem;
+    min-height: auto;
+    gap: 4rem;
+    padding: 5rem 1.2rem 1.5rem;
+  }
+  /* CV (and any) folder: static chip top-right, no scatter / overlap */
+  .outro.is-mobile .folder {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.2rem;
+    left: auto;
+    bottom: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    transform: none !important;
+    font-size: 0.72rem;
+  }
+  .outro.is-mobile .folder svg {
+    width: 30px;
+    height: 24px;
   }
   .footer-mark {
     font-size: clamp(2rem, 15vw, 6rem);
@@ -1039,11 +1119,11 @@ video {
     font-size: clamp(1.6rem, 8vw, 3rem);
   }
 
-  /* ---- ABOUT PANEL: full width ---- */
+  /* ---- ABOUT PANEL: narrow slide-in (capped on wider reduced windows) ---- */
   .about-panel {
-    width: auto;
+    width: min(calc(100vw - 2rem), 460px);
     left: 1rem;
-    right: 1rem;
+    right: auto;
     top: 1rem;
     bottom: 1rem;
     padding: 2.5rem 1.5rem;

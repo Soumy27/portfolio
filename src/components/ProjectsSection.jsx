@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { projects, services } from '../data/content'
+import useIsMobile from '../hooks/useIsMobile'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const mobileQuery = '(max-width: 768px)'
 
 const Arrow = () => (
   <svg className="card-arrow" viewBox="0 0 28 28" fill="none">
@@ -30,10 +29,7 @@ export default function ProjectsSection() {
   const serviceRef = useRef(null)
   const titleRef = useRef(null)
   const cardsRef = useRef(null)
-  const [isMobile] = useState(
-    () =>
-      typeof window !== 'undefined' && window.matchMedia(mobileQuery).matches
-  )
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     // mobile: plain stacked layout (no pinned scatter animation)
@@ -51,6 +47,7 @@ export default function ProjectsSection() {
         start: 'top 60%',
         end: 'bottom bottom',
         scrub: 1,
+        invalidateOnRefresh: true,
       },
     })
 

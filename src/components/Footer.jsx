@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
 import { profile, folders } from '../data/content'
+import useIsMobile from '../hooks/useIsMobile'
 
 gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin)
 
@@ -20,8 +21,12 @@ function FolderIcon() {
 
 export default function Footer() {
   const root = useRef(null)
+  const isMobile = useIsMobile()
 
+  // Draggable scatter is a desktop-only flourish — on mobile the folders are
+  // laid out statically (see CSS) so they don't cover the headline.
   useEffect(() => {
+    if (isMobile) return
     const els = root.current.querySelectorAll('.folder')
     els.forEach((el, i) => {
       gsap.set(el, {
@@ -35,8 +40,11 @@ export default function Footer() {
       inertia: true,
       edgeResistance: 0.7,
     })
-    return () => drags.forEach((d) => d.kill())
-  }, [])
+    return () => {
+      drags.forEach((d) => d.kill())
+      els.forEach((el) => gsap.set(el, { clearProps: 'all' }))
+    }
+  }, [isMobile])
 
   // smooth fade-up reveal of the footer content as it scrolls into view
   useEffect(() => {
@@ -68,7 +76,7 @@ export default function Footer() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
   return (
-    <footer className="outro" ref={root}>
+    <footer className={`outro${isMobile ? ' is-mobile' : ''}`} ref={root}>
       <div className="metallic metallic-bg" />
 
       <h4 className="outro-headline">
